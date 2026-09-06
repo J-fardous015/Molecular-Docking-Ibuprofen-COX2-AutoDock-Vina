@@ -1,0 +1,11 @@
+
+receptor = cox2_prepared.pdbqt
+ligand = ibuprofen_prepared.pdbqt
+
+center_x = 24.263, center_y = 21.528, center_z = 16.497    # search box center (	PyMOL Chain A S58 center)
+
+size_x = 25, size_y = 25, size_z = 25      # search box size
+
+exhaustiveness = 10          # 10 independent searches, computation time
+
+num_modes = 10            # keep 10 best different position found
