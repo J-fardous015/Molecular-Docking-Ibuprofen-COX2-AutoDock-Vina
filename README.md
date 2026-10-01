@@ -6,6 +6,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![AutoDock Vina](https://img.shields.io/badge/AutoDock_Vina-1.2.5-green)
 ![RDKit](https://img.shields.io/badge/RDKit-2024.09-red)
+![PyMol](https://img.shields.io/badge/PyMOL-3.1.8-purple)
 ![Platform](https://img.shields.io/badge/Platform-Google_Colab-yellow)
 
 ---
@@ -24,6 +25,50 @@ Cyclooxygenase, a natural enzym present in our human body. COX-2 reamins inactiv
 
 ## Protein and Ligand
 
+| Property | Details |
+|---|---|
+| Target protein | Cyclooxygenase-2 (COX-2) |
+| Organism | *Mus musculus* (mouse) |
+| PDB ID | [1CX2](https://www.rcsb.org/structure/1CX2) |
+|Co-crystallised ligand | SC-558 (residue: S58) |
+| Ligand tested | Ibuprofen |
+| Ibuprofen SMILES | `CC(C)CC1=CC=C(C=C1)C(C)C(=O)O` |
 
 
+---
+
+##  Method
+
+### 1. Protein Preparation
+- Protein (`1CX2`) downloaded from RCSB PDB
+- Remove water molecules (`HOH`), Heme group or hetero atom (`HEM`), Inhibitore (`S58`), crystallographic artifacts(`SO4, NAG`) using PDB purser
+- Added missing residues, fixed non-standard residues, and added hydrogen at 7.4 pH using 
+**PDBFixer**
+- PDB file converted to PDBQT using **OpenBable** with Gasteiger mathematical charge calculation method
+
+
+
+### 2. Ligand Preparation
+- SMILES collected from PubChem
+- SMILES converted to MOL using **RDKit**
+`Chem.MolFromSmiles(simles)`
+- Added Hydrogen atom `Chem.AddHs(mol)`
+- Generated 3D coordinates `AllChem.EmbedMolecule, randomSeed = 42`
+- Optimized the 3D shape using Merck Molecular Force Field (MMFF) `AllChem.MMFFOptimizeMolecule`
+- MOL converted to PDBQT formate with partial charges, and AutoDock atom types using **Meeko**
+
+### 3. Search Box Define
+- SDF file of small molecule `S58` downloaded from RCSB Instance Coordinates
+- Opened in **PyMOL**, used command `get_position` for coordinates, results `[ 24.263, 21.528, 16.497]`
+- Used `get_extent`for coordinate span, results `min: [ 18.483, 18.488, 10.836], max: [ 29.412, 24.676, 20.036]`.
+- Search box set to **25×25×25 Å** to provide sufficient conformational sampling space
+
+### 4. Docking 
+- Docking ran in **AutoDock Vina** with `exhaustiveness = 10`, `num_modes = 10`. 
+- Scoring function: combines four physical forces;Vander Waals, Hydrogen Bonds, Electrostatic, and Hydrophobic
+
+### 5. Visualization
+- Docking result loaded in **PyMOL**
+- Binding site residues selected within 3.5 Å of ligand (54 atoms)
+- Used `distance` command for measuring Hydrogen bond distances
 
