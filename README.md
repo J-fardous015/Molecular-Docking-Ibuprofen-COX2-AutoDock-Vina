@@ -41,34 +41,34 @@ Cyclooxygenase, a natural enzym present in our human body. COX-2 reamins inactiv
 
 ### 1. Protein Preparation
 - Protein (`1CX2`) downloaded from RCSB PDB
-- Remove water molecules (`HOH`), Heme group or hetero atom (`HEM`), Inhibitore (`S58`), crystallographic artifacts(`SO4, NAG`) using PDB purser
-- Added missing residues, fixed non-standard residues, and added hydrogen at 7.4 pH using 
+- Removed water molecules (`HOH`), Heme group or hetero atom (`HEM`), inhibitor (`S58`), crystallographic artifacts(`SO4, NAG`) using PDB purser
+- Added missing residues, fixed non-standard residues, and added hydrogen at pH 7.4 using 
 **PDBFixer**
-- PDB file converted to PDBQT using **OpenBable** with Gasteiger mathematical charge calculation method
+- PDB file converted to PDBQT using **OpenBabel** with the Gasteiger charge calculation method
 
 ### 2. Ligand Preparation
 - SMILES collected from PubChem
 - SMILES converted to MOL using **RDKit**
 `Chem.MolFromSmiles(simles)`
-- Added Hydrogen atom `Chem.AddHs(mol)`
+- Added hydrogen atoms `Chem.AddHs(mol)`
 - Generated 3D coordinates `AllChem.EmbedMolecule, randomSeed = 42`
-- Optimized the 3D shape using Merck Molecular Force Field (MMFF) `AllChem.MMFFOptimizeMolecule`
-- MOL converted to PDBQT formate with partial charges, and AutoDock atom types using **Meeko**
+- Optimized the 3D shape using Merck Molecular Force Field (MMFF) `AllChem.MMFFOptimizeMolecule.`
+- MOL converted to PDBQT format with partial charges and AutoDock atom types using **Meeko**
 
-### 3. Search Box Define
-- SDF file of small molecule `S58` downloaded from RCSB Instance Coordinates
+### 3. Search Box Definition
+- SDF file of small molecule `S58` downloaded from PDB instance coordinates
 - Opened in **PyMOL**, used command `get_position` for coordinates, results `[ 24.263, 21.528, 16.497]`
-- Used `get_extent`for coordinate span, results `min: [ 18.483, 18.488, 10.836], max: [ 29.412, 24.676, 20.036]`.
+- Used `get_extent`for coordinate span; results: `min: [ 18.483, 18.488, 10.836], max: [ 29.412, 24.676, 20.036]`.
 - Search box set to **25×25×25 Å** to provide sufficient conformational sampling space
 
 ### 4. Docking 
 - Docking ran in **AutoDock Vina** with `exhaustiveness = 10`, `num_modes = 10`. 
-- Scoring function: combines four physical forces;Vander Waals, Hydrogen Bonds, Electrostatic, and Hydrophobic
+- Scoring function: combines four physical forces: van der Waals, Hydrogen Bonds, Electrostatic, and Hydrophobic
 
 ### 5. Visualization
 - Docking result loaded in **PyMOL**
-- Binding site residues selected within 3.5 Å of ligand (54 atoms)
-- Used `distance` command for measuring Hydrogen bond distances
+- Binding site residues selected within 3.5 Å of the ligand (54 atoms)
+- Used the `distance` command for measuring Hydrogen bond distances
 
 ---
 
